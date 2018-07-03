@@ -22,7 +22,10 @@ class PyService4Win(win32serviceutil.ServiceFramework):
     def SvcDoRun(self):
         # 实践在某些系统下找不到环境变量，可以用绝对路径访问
         command = "%FLUME_HOME%\\bin\\flume-ng agent -name myflume -f %FLUME_HOME%\\conf\\myflume.conf -property 'flume.root.logger=INFO,LOGFILE,console'"
-        os.system(command)
+
+        result = os.popen(command)
+
+        self.logger.info(result.read())
         # 等待服务被停止
         win32event.WaitForSingleObject(self.hWaitStop, win32event.INFINITE)
 
